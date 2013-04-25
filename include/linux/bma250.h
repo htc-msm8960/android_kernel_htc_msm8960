@@ -22,6 +22,7 @@
 #define BMA250_CHIP_ID			3
 #define BMA250_RANGE_SET		0
 #define BMA250_BW_SET			2
+#define BMA250E_CHIP_ID			0xF9
 
 #define LOW_G_INTERRUPT				REL_Z
 #define HIGH_G_INTERRUPT 			REL_HWHEEL

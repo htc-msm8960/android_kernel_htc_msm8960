@@ -152,7 +152,6 @@ config INPUT_MC13783_PWRBUTTON
 	help
 	  Support the ON buttons of MC13783 PMIC as an input device
 	  reporting power button status.
-
 	  To compile this driver as a module, choose M here: the module
 	  will be called mc13783-pwrbutton.
 
@@ -653,6 +652,12 @@ config STM_LIS3DH
         help
           If you say yes here you get support for STMicroelectronics's
           acceleration sensors LIS3DH.
+
+config BOSCH_BMA250
+	tristate "ported from stock m7 kernel"
+        depends on I2C=y
+	help
+	 driver.
 
 config SENSORS_AKM8975_PANA_GYRO
         tristate "AKM8973 Compass Driver for Pana Gyro"
