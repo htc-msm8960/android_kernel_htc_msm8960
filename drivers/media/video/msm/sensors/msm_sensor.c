@@ -1825,6 +1825,12 @@ int32_t msm_sensor_i2c_probe(struct i2c_client *client,
 		return -EFAULT;
 	}
 
+	rc = s_ctrl->func_tbl->sensor_power_up(s_ctrl);
+	if (rc < 0) {
+		pr_err("%s %s power up failed\n", __func__, client->name);
+		return rc;
+	}
+
 	if (s_ctrl->sensordata->use_rawchip)
           {
 #ifdef CONFIG_RAWCHIP
@@ -1851,12 +1857,6 @@ int32_t msm_sensor_i2c_probe(struct i2c_client *client,
 		}
 #endif
         }
-
-	rc = s_ctrl->func_tbl->sensor_power_up(s_ctrl);
-	if (rc < 0) {
-		pr_err("%s %s power up failed\n", __func__, client->name);
-		return rc;
-	}
 
 	if (s_ctrl->func_tbl->sensor_match_id)
 		rc = s_ctrl->func_tbl->sensor_match_id(s_ctrl);
