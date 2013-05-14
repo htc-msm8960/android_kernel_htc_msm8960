@@ -45,7 +45,7 @@
 #include "Yushan_API.h"
 #include "Yushan_Platform_Specific.h"
 #include "Yushan_HTC_Functions.h"
-#include "msm.h"
+#include "../msm.h"
 #include "../sensors/msm_sensor.h"
 
 struct rawchip_ctrl {

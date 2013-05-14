@@ -2003,6 +2003,16 @@ int32_t msm_sensor_power(struct v4l2_subdev *sd, int on)
 				s_ctrl->sensordata->sensor_name, rc);
 			s_ctrl->sensor_state = MSM_SENSOR_POWER_DOWN;
 		} else {
+#ifdef CONFIG_RAWCHIP
+                  if (s_ctrl->sensordata->use_rawchip)
+                    rc = rawchip_open_init();
+#endif
+#ifdef CONFIG_RAWCHIPII
+                  if (s_ctrl->sensordata->htc_image == HTC_CAMERA_IMAGE_YUSHANII_BOARD)
+                    rc = YushanII_open_init();
+#endif
+                  if (!rc)
+                    {
 			if (s_ctrl->func_tbl->sensor_match_id)
 				rc = s_ctrl->func_tbl->sensor_match_id(s_ctrl);
 			else
@@ -2019,10 +2029,23 @@ int32_t msm_sensor_power(struct v4l2_subdev *sd, int on)
 				s_ctrl->sensor_state = MSM_SENSOR_POWER_DOWN;
 			}
 			s_ctrl->sensor_state = MSM_SENSOR_POWER_UP;
+                    }
 		}
 	} else {
 		rc = s_ctrl->func_tbl->sensor_power_down(s_ctrl);
 		s_ctrl->sensor_state = MSM_SENSOR_POWER_DOWN;
+
+#ifdef CONFIG_RAWCHIP
+                if (p_mctl->sdata->use_rawchip) {
+                  rawchip_release();
+                }
+#endif
+
+#ifdef CONFIG_RAWCHIPII
+                if (p_mctl->sdata->htc_image == HTC_CAMERA_IMAGE_YUSHANII_BOARD) {
+                  YushanII_release();
+                }
+#endif
 	}
 	mutex_unlock(s_ctrl->msm_sensor_mutex);
 	return rc;
