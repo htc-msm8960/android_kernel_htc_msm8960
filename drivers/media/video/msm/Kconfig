@@ -136,6 +136,23 @@ config IMX074_ACT
 	---help---
 	Actuator for SONY 13.5 MP Bayer Sensor
 
+config S5K3H2YX
+	bool "Sensor s5k3h2yx (Samsung 8M)"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  Support for S5K3H2YX samsung sensor driver.
+	  It is a Bayer 8MP sensor with auto focus and it supports
+	  two mipi lanes.
+
+config MT9V113
+	bool "Sensor mt9v113 (VGA YUV)"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  Support for MT9V113 Micron sensor driver.
+	  It is a Bayer 0.3MP sensor it supports two mipi lanes.
+
 config S5K3E2FX
 	bool "Sensor s5k3e2fx (Samsung 5M)"
 	depends on MSM_CAMERA && !ARCH_MSM8X60 && !MSM_CAMERA_V4L2
