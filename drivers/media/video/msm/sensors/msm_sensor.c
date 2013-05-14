@@ -2036,13 +2036,13 @@ int32_t msm_sensor_power(struct v4l2_subdev *sd, int on)
 		s_ctrl->sensor_state = MSM_SENSOR_POWER_DOWN;
 
 #ifdef CONFIG_RAWCHIP
-                if (p_mctl->sdata->use_rawchip) {
+                if (s_ctrl->sensordata->use_rawchip) {
                   rawchip_release();
                 }
 #endif
 
 #ifdef CONFIG_RAWCHIPII
-                if (p_mctl->sdata->htc_image == HTC_CAMERA_IMAGE_YUSHANII_BOARD) {
+                if (s_ctrl->sensordata->htc_image == HTC_CAMERA_IMAGE_YUSHANII_BOARD) {
                   YushanII_release();
                 }
 #endif
