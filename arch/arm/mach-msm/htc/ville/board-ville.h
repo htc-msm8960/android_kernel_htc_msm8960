@@ -282,8 +282,13 @@ int __init ville_init_keypad(void);
 int __init ville_gpiomux_init(void);
 void __init ville_init_pmic(void);
 void __init ville_init_camera(void);
+void __init ville_init_rawchip(void);
 void __init ville_pm8921_gpio_mpp_init(void);
 void __init msm8960_allocate_fb_region(void);
+#ifdef CONFIG_MSM_CAMERA
+int camera_sensor_power_enable(char *power, unsigned volt, struct regulator **sensor_power);
+int camera_sensor_power_disable(struct regulator *sensor_power);
+#endif
 void ville_init_mmc(void);
 void ville_init_fb(void);
 void ville_init_gpu(void);
@@ -291,6 +296,8 @@ void ville_init_gpu(void);
 int hdmi_enable_5v(int on);
 void hdmi_hpd_feature(int on);
 #endif
+
+#define MSM_8960_GSBI4_QUP_I2C_BUS_ID 4
 
 extern struct msm_camera_board_info ville_camera_board_info;
 extern struct msm_cache_dump_platform_data msm8960_cache_dump_pdata;

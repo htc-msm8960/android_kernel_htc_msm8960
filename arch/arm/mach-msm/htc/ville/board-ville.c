@@ -3211,7 +3211,9 @@ static void __init ville_init(void)
 	msm_uart_gsbi_gpio_init();
 	msm_region_id_gpio_init();
 	platform_add_devices(ville_devices, ARRAY_SIZE(ville_devices));
-        //	ville_init_camera();
+#ifdef CONFIG_MSM_CAMERA
+        ville_init_camera();
+#endif
 	ville_init_mmc();
 	//	acpuclk_init(&acpuclk_8960_soc_data);
 
