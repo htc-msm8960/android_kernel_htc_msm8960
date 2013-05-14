@@ -26,6 +26,9 @@
 #include <linux/of_platform.h>
 #include <linux/msm_ssbi.h>
 #include <mach/msm_bus.h>
+#if defined(CONFIG_RAWCHIP) || defined(CONFIG_RAWCHIPII)
+#include <mach/board_rawchip.h>
+#endif
 
 struct msm_camera_io_ext {
 	uint32_t mdcphy;
@@ -224,6 +227,12 @@ struct msm_camera_sensor_platform_info {
 	struct msm_camera_gpio_conf *gpio_conf;
 	struct msm_camera_i2c_conf *i2c_conf;
 	struct msm_camera_csi_lane_params *csi_lane_params;
+#ifdef CONFIG_RAWCHIPII
+	enum msm_camera_pixel_order_default pixel_order_default;
+#endif
+#if defined(CONFIG_RAWCHIP) || defined(CONFIG_RAWCHIPII)
+	enum sensor_flip_mirror_info mirror_flip;
+#endif
 };
 
 enum msm_camera_actuator_name {
@@ -276,6 +285,17 @@ struct msm_camera_sensor_info {
 	struct msm_actuator_info *actuator_info;
 	int pmic_gpio_enable;
 	struct msm_eeprom_info *eeprom_info;
+#ifdef CONFIG_RAWCHIPII
+	void (*camera_yushanii_probed)(enum htc_camera_image_type_board);
+	enum htc_camera_image_type_board htc_image;
+#endif
+#if defined(CONFIG_RAWCHIP) || defined(CONFIG_RAWCHIPII)
+	int use_rawchip;
+#endif
+#ifdef CONFIG_RAWCHIPII
+        int hdr_mode;
+	int sensor_cut;
+#endif
 };
 
 struct msm_camera_board_info {

@@ -12,6 +12,13 @@ ifeq ($(CONFIG_MSM_CAMERA_V4L2),y)
   EXTRA_CFLAGS += -Idrivers/media/video/msm/server
   obj-$(CONFIG_MSM_CAMERA) += msm_isp.o msm.o msm_mem.o msm_mctl.o msm_mctl_buf.o msm_mctl_pp.o
   obj-$(CONFIG_MSM_CAMERA) += server/
+ifeq ($(CONFIG_RAWCHIP),y)
+  obj-$(CONFIG_MSM_CAMERA) += rawchip/
+endif
+ifeq ($(CONFIG_RAWCHIPII),y)
+  obj-$(CONFIG_MSM_CAMERA) += yushanII/
+endif
+
   obj-$(CONFIG_MSM_CAM_IRQ_ROUTER) += msm_camirq_router.o
   obj-$(CONFIG_MSM_CAMERA) += cci/ eeprom/ sensors/ actuators/ csi/
   obj-$(CONFIG_MSM_CPP) += cpp/

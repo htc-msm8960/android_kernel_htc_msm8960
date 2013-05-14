@@ -209,7 +209,8 @@ struct msm_sensor_ctrl_t {
 	enum msm_sensor_cam_mode_t cam_mode;
 
 	struct mutex *msm_sensor_mutex;
-
+        struct msm_camera_csi2_params *curr_csi_params; // TO REMOVE
+        struct msm_camera_csi_params *curr_csic_params; // TO REMOVE
 	struct v4l2_subdev sensor_v4l2_subdev;
 	struct v4l2_subdev_info *sensor_v4l2_subdev_info;
 	uint8_t sensor_v4l2_subdev_info_size;
@@ -227,6 +228,9 @@ struct msm_sensor_ctrl_t {
 	/* delay (in ms) after power up sequence */
 	uint16_t power_seq_delay;
 	struct msm_sensor_eeprom_data eeprom_data;
+#ifdef CONFIG_RAWCHIP
+	int mirror_flip;
+#endif
 };
 
 struct msm_sensor_ctrl_t *get_sctrl(struct v4l2_subdev *sd);

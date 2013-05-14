@@ -1313,6 +1313,20 @@ struct msm_sensor_output_info_t {
 	uint32_t vt_pixel_clk;
 	uint32_t op_pixel_clk;
 	uint16_t binning_factor;
+#ifdef CONFIG_RAWCHIP
+	uint16_t x_addr_start;
+	uint16_t y_addr_start;
+	uint16_t x_addr_end;
+	uint16_t y_addr_end;
+	uint16_t x_even_inc;
+	uint16_t x_odd_inc;
+	uint16_t y_even_inc;
+	uint16_t y_odd_inc;
+	uint8_t binning_rawchip;
+#endif
+#ifdef CONFIG_RAWCHIPII
+	uint8_t is_hdr;
+#endif
 };
 
 struct sensor_output_info_t {
@@ -1931,6 +1945,14 @@ struct flash_ctrl_data {
 	} ctrl_data;
 };
 
+#ifdef CONFIG_RAWCHIPII
+enum htc_camera_image_type {
+	HTC_CAMERA_IMAGE_NONE,
+	HTC_CAMERA_IMAGE_YUSHANII,
+	HTC_CAMERA_IMAGE_MAX,
+};
+#endif
+
 #define GET_NAME			0
 #define GET_PREVIEW_LINE_PER_FRAME	1
 #define GET_PREVIEW_PIXELS_PER_LINE	2
@@ -1954,6 +1976,16 @@ struct msm_camsensor_info {
 	int mount_angle;
 	uint32_t max_width;
 	uint32_t max_height;
+#ifdef CONFIG_RAWCHIPII
+	enum htc_camera_image_type htc_image;
+	uint8_t hdr_mode;
+#endif
+#if defined(CONFIG_RAWCHIP) || defined(CONFIG_RAWCHIPII)
+	uint8_t use_rawchip;
+#endif
+#ifdef CONFIG_RAWCHIPII
+	uint8_t video_hdr_capability;
+#endif
 };
 
 #define V4L2_SINGLE_PLANE	0

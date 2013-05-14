@@ -288,6 +288,20 @@ config MSM_VPE
 	---help---
 	  Enable support for Video Pre-processing Engine
 
+config RAWCHIP
+	bool "Rawchip"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  ST Yushan rawchip
+
+config RAWCHIPII
+        bool "RawchipII"
+        depends on MSM_CAMERA
+        default n
+        ---help---
+          ST Yushan rawchipII
+
 config MSM_CAM_IRQ_ROUTER
 	bool "Enable MSM CAM IRQ Router"
 	depends on MSM_CAMERA

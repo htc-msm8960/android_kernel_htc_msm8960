@@ -1547,3 +1547,46 @@ failure:
 }
 EXPORT_SYMBOL(msm_sensor_register);
 
+#ifdef CONFIG_RAWCHIP
+static struct kobject *rawchip_status_obj;
+
+uint32_t rawchip_id;
+
+static ssize_t probed_rawchip_id_get(struct device *dev,
+				struct device_attribute *attr, char *buf)
+{
+	ssize_t length;
+	length = sprintf(buf, "0x%x\n", rawchip_id);
+	return length;
+}
+
+static DEVICE_ATTR(probed_rawchip_id, 0444,
+	probed_rawchip_id_get,
+	NULL);
+
+int msm_rawchip_attr_node(void)
+{
+	int ret = 0;
+
+	rawchip_status_obj = kobject_create_and_add("camera_rawchip_status", NULL);
+	if (rawchip_status_obj == NULL) {
+		pr_err("msm_camera: create camera_rawchip_status failed\n");
+		ret = -ENOMEM;
+		goto error;
+	}
+
+	ret = sysfs_create_file(rawchip_status_obj,
+		&dev_attr_probed_rawchip_id.attr);
+	if (ret) {
+		pr_info("msm_camera: sysfs_create_file dev_attr_probed_rawchip_id failed\n");
+		ret = -EFAULT;
+		goto error;
+	}
+
+	return ret;
+
+error:
+	kobject_del(rawchip_status_obj);
+	return ret;
+}
+#endif
