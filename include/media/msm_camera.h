@@ -1313,7 +1313,6 @@ struct msm_sensor_output_info_t {
 	uint32_t vt_pixel_clk;
 	uint32_t op_pixel_clk;
 	uint16_t binning_factor;
-#ifdef CONFIG_RAWCHIP
 	uint16_t x_addr_start;
 	uint16_t y_addr_start;
 	uint16_t x_addr_end;
@@ -1323,10 +1322,7 @@ struct msm_sensor_output_info_t {
 	uint16_t y_even_inc;
 	uint16_t y_odd_inc;
 	uint8_t binning_rawchip;
-#endif
-#ifdef CONFIG_RAWCHIPII
 	uint8_t is_hdr;
-#endif
 };
 
 struct sensor_output_info_t {
