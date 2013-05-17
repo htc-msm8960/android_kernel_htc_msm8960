@@ -195,7 +195,6 @@ static unsigned int sdc1_sup_clk_rates[] = {
 	400000, 24000000, 48000000, 96000000
 };
 
-static unsigned int dlxj_sdc1_slot_type = MMC_TYPE_MMC;
 static struct mmc_platform_data sdc1_data = {
 	.ocr_mask       = MMC_VDD_27_28 | MMC_VDD_28_29,
 #ifdef CONFIG_MMC_MSM_SDC1_8_BIT_SUPPORT
@@ -205,7 +204,6 @@ static struct mmc_platform_data sdc1_data = {
 #endif
 	.sup_clk_table	= sdc1_sup_clk_rates,
 	.sup_clk_cnt	= ARRAY_SIZE(sdc1_sup_clk_rates),
-	.slot_type      = &dlxj_sdc1_slot_type,
 	.pin_data	= &mmc_slot_pin_data[SDCC1],
 	.vreg_data	= &mmc_slot_vreg_data[SDCC1],
 	.nonremovable   = 1,
@@ -343,14 +341,12 @@ static unsigned int m7_wifi_status(struct device *dev)
 static unsigned int wifi_sup_clk_rates[] = {
 	400000, 24000000, 48000000, 96000000, 192000000
 };
-static unsigned int m7_wifislot_type = MMC_TYPE_SDIO_WIFI;
 static struct mmc_platform_data m7_wifi_data = {
 	.ocr_mask               = MMC_VDD_28_29,
 	.status                 = m7_wifi_status,
 	.register_status_notify = m7_wifi_status_register,
 	.embedded_sdio          = &m7_wifi_emb_data,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
-	.slot_type = &m7_wifislot_type,
 	.sup_clk_table = wifi_sup_clk_rates,
 	.sup_clk_cnt = ARRAY_SIZE(wifi_sup_clk_rates),
 	.uhs_caps = (MMC_CAP_UHS_SDR12 | MMC_CAP_UHS_SDR25 |
