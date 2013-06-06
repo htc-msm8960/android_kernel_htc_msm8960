@@ -8,6 +8,8 @@ obj-$(CONFIG_MACH_VILLE) += ville/
 obj-$(CONFIG_MACH_ELITE) += elite/
 # JET/JEWEL
 obj-$(CONFIG_MACH_JET) += jet/
+# FIGHTER/FIREBALL
+obj-$(CONFIG_MACH_FIGHTER) += fighter/
 # M7
 obj-$(CONFIG_MACH_M7_UL) += m7/
 
