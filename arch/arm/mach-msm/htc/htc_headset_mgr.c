@@ -657,8 +657,17 @@ static void mic_detect_work_func(struct work_struct *work)
 	}
 
 	if (new_state != old_state) {
+		if (old_state & new_state & MASK_35MM_HEADSET) {
+			if (hi->pdata.driver_flag & DRIVER_HS_MGR_OLD_AJ) {
+				new_state |= old_state;
+				HS_LOG("Old audio jack found, use workaround");
+			} else {
+				switch_set_state(&hi->sdev_h2w, old_state & ~MASK_35MM_HEADSET);
+				HS_LOG("Report fake remove event");
+			}
+		}
 		HS_LOG_TIME("Plug/Unplug accessory, old_state 0x%x, new_state 0x%x", old_state, new_state);
-		switch_set_state(&hi->sdev_h2w, old_state & ~MASK_35MM_HEADSET);
+                //		switch_set_state(&hi->sdev_h2w, old_state & ~MASK_35MM_HEADSET);
 		hi->hs_35mm_type = mic;
 		HS_LOG_TIME("Plug accessory and update MIC status");
 		switch_set_state(&hi->sdev_h2w, new_state);
@@ -739,7 +748,10 @@ static void remove_detect_work_func(struct work_struct *work)
 
 	if (time_before_eq(jiffies, hi->insert_jiffies + HZ)) {
 		HS_LOG("Waiting for HPIN stable");
-		msleep(HS_DELAY_SEC - HS_DELAY_REMOVE);
+		if (hi->pdata.driver_flag & DRIVER_HS_MGR_OLD_AJ)
+			msleep(HS_DELAY_SEC - HS_DELAY_REMOVE_LONG);
+		else
+			msleep(HS_DELAY_SEC - HS_DELAY_REMOVE);
 	}
 
 	if (hi->is_ext_insert) {
@@ -973,7 +985,14 @@ int hs_notify_plug_event(int insert, unsigned int intr_id)
 		HS_LOG("queue insert work, ret = %d", ret);
 	}
 	else {
-		ret = queue_delayed_work(detect_wq, &remove_detect_work, 0);
+		if (hi->pdata.driver_flag & DRIVER_HS_MGR_OLD_AJ) {
+			ret = queue_delayed_work(detect_wq, &remove_detect_work,
+					HS_JIFFIES_REMOVE_LONG);
+		} else {
+			ret = queue_delayed_work(detect_wq, &remove_detect_work,
+					HS_JIFFIES_REMOVE);
+		}
+                //		ret = queue_delayed_work(detect_wq, &remove_detect_work, 0);
 		HS_LOG("queue remove work, ret = %d", ret);
 	}
 
