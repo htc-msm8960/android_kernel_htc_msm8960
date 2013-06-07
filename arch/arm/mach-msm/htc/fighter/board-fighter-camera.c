@@ -1056,34 +1056,22 @@ struct i2c_board_info fighter_camera_i2c_boardinfo[] = {
 #ifdef CONFIG_S5K3H2YX
         {
         I2C_BOARD_INFO("s5k3h2yx", 0x20 >> 1),
+        .platform_data = &msm_camera_sensor_s5k3h2yx_data,
         },
 #endif
 //HTC start Tom Lin 2011/12/19
 #ifdef CONFIG_IMX105
 	{
 	I2C_BOARD_INFO("imx105", 0x1A), 
+        .platform_data = &msm_camera_sensor_imx105_data,
 	},
 #endif
 //HTC end Tom Lin 2011/12/19
 #ifdef CONFIG_MT9V113
         {
         I2C_BOARD_INFO("mt9v113", 0x3C),
+        .platform_data = &msm_camera_sensor_mt9v113_data,
         },
-#endif
-#ifdef CONFIG_S5K6A1GX
-        {
-        I2C_BOARD_INFO("s5k6a1gx", 0x6C >> 1),
-        },
-#endif
-#ifdef CONFIG_IMX074
-	{
-	I2C_BOARD_INFO("imx074", 0x1A),
-	},
-#endif
-#ifdef CONFIG_OV2720
-	{
-	I2C_BOARD_INFO("ov2720", 0x6C),
-	},
 #endif
 #ifdef CONFIG_MSM_CAMERA_FLASH_SC628A
 	{
