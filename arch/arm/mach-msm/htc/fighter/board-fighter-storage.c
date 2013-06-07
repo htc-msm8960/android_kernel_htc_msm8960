@@ -113,9 +113,9 @@ static struct msm_mmc_pad_pull sdc1_pad_pull_off_cfg[] = {
 };
 
 static struct msm_mmc_pad_drv sdc3_pad_drv_on_cfg[] = {
-	{TLMM_HDRV_SDC3_CLK, GPIO_CFG_8MA},
+	{TLMM_HDRV_SDC3_CLK, GPIO_CFG_12MA},
 	{TLMM_HDRV_SDC3_CMD, GPIO_CFG_8MA},
-	{TLMM_HDRV_SDC3_DATA, GPIO_CFG_8MA}
+	{TLMM_HDRV_SDC3_DATA, GPIO_CFG_10MA}
 };
 
 static struct msm_mmc_pad_drv sdc3_pad_drv_off_cfg[] = {
@@ -132,8 +132,8 @@ static struct msm_mmc_pad_pull sdc3_pad_pull_on_cfg[] = {
 
 static struct msm_mmc_pad_pull sdc3_pad_pull_off_cfg[] = {
 	{TLMM_PULL_SDC3_CLK, GPIO_CFG_NO_PULL},
-	{TLMM_PULL_SDC3_CMD, GPIO_CFG_PULL_UP},
-	{TLMM_PULL_SDC3_DATA, GPIO_CFG_PULL_UP}
+	{TLMM_PULL_SDC3_CMD, GPIO_CFG_PULL_DOWN},
+	{TLMM_PULL_SDC3_DATA, GPIO_CFG_PULL_DOWN}
 };
 
 static struct msm_mmc_pad_pull_data mmc_pad_pull_data[MAX_SDCC_CONTROLLER] = {
@@ -250,31 +250,12 @@ static struct mmc_platform_data msm8960_sdc1_data = {
 };
 #endif
 
-#ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
-static unsigned int sdc2_sup_clk_rates[] = {
-	400000, 24000000, 48000000
-};
-
-static struct mmc_platform_data msm8960_sdc2_data = {
-	.ocr_mask       = MMC_VDD_165_195,
-	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
-	.sup_clk_table  = sdc2_sup_clk_rates,
-	.sup_clk_cnt    = ARRAY_SIZE(sdc2_sup_clk_rates),
-	.pclk_src_dfab  = 1,
-	.vreg_data      = &mmc_slot_vreg_data[SDCC2],
-	.pin_data       = &mmc_slot_pin_data[SDCC2],
-	.sdiowakeup_irq = MSM_GPIO_TO_INT(90),
-	.msm_bus_voting_data = &sps_to_ddr_bus_voting_data,
-};
-#endif
-
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
 static struct mmc_platform_data msm8960_sdc3_data = {
 	.ocr_mask       = MMC_VDD_27_28 | MMC_VDD_28_29,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.sup_clk_table	= sdc3_sup_clk_rates,
 	.sup_clk_cnt	= ARRAY_SIZE(sdc3_sup_clk_rates),
-	.pclk_src_dfab	= 1,
 #ifdef CONFIG_MMC_MSM_SDC3_WP_SUPPORT
 	.wpswitch_gpio	= PM8921_GPIO_PM_TO_SYS(16),
 #endif
