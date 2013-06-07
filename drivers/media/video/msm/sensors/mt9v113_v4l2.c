@@ -42,6 +42,10 @@
 
 static struct msm_sensor_ctrl_t mt9v113_s_ctrl;
 
+static struct msm_camera_i2c_client mt9v113_sensor_i2c_client = {
+	.addr_type = MSM_CAMERA_I2C_WORD_ADDR,
+};
+
 DEFINE_MUTEX(mt9v113_mut);
 
 #define  MT9V113_MODEL_ID     	0x2280 
@@ -136,39 +140,10 @@ struct mt9v113_format {
 	u16 order;
 };
 
-static int i2c_transfer_retry(struct i2c_adapter *adap,
-			struct i2c_msg *msgs,
-			int len)
-{
-	int i2c_retry = 0;
-	int ns; 
-
-	while (i2c_retry++ < MAX_I2C_RETRIES) {
-		ns = i2c_transfer(adap, msgs, len);
-		if (ns == len)
-			break;
-		pr_err("%s: try %d/%d: i2c_transfer sent: %d, len %d\n",
-			__func__,
-			i2c_retry, MAX_I2C_RETRIES, ns, len);
-		msleep(10);
-	}
-
-	return ns == len ? 0 : -EIO;
-}
-
 static int mt9v113_i2c_txdata(unsigned short saddr,
 				  unsigned char *txdata, int length)
 {
-	struct i2c_msg msg[] = {
-		{
-		 .addr = saddr >> 1,
-		 .flags = 0,
-		 .len = length,
-		 .buf = txdata,
-		 },
-	};
-
-	if (i2c_transfer_retry(mt9v113_client->adapter, msg, 1) < 0) {
+        if (msm_camera_i2c_txdata(&mt9v113_sensor_i2c_client, txdata, length) < 0) {
 		pr_err("mt9v113_i2c_txdata failed\n");
 		return -EIO;
 	}
@@ -243,22 +218,7 @@ static int mt9v113_i2c_write_table(struct mt9v113_i2c_reg_conf
 static int mt9v113_i2c_rxdata(unsigned short saddr,
 			      unsigned char *rxdata, int length)
 {
-	struct i2c_msg msgs[] = {
-		{
-		 .addr = saddr >> 1,
-		 .flags = 0,
-		 .len = 2,  
-		 .buf = rxdata,
-		 },
-		{
-		 .addr = saddr >> 1,
-		 .flags = I2C_M_RD,
-		 .len = length,
-		 .buf = rxdata,
-		 },
-	};
-
-	if (i2c_transfer_retry(mt9v113_client->adapter, msgs, 2) < 0) {
+        if (msm_camera_i2c_rxdata(&mt9v113_sensor_i2c_client, rxdata, length) < 0) {
 		pr_err("mt9v113_i2c_rxdata failed!\n");
 		return -EIO;
 	}
@@ -2506,10 +2466,6 @@ probe_failure:
 
 	return rc;
 }
-
-static struct msm_camera_i2c_client mt9v113_sensor_i2c_client = {
-	.addr_type = MSM_CAMERA_I2C_WORD_ADDR,
-};
 
 static struct msm_sensor_id_info_t mt9v113_id_info = {
 	.sensor_id_reg_addr = 0x0,
