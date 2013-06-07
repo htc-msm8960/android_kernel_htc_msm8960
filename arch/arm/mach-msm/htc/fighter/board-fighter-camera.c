@@ -359,6 +359,10 @@ struct msm_camera_device_platform_data msm_camera_csi_device_data[] = {
 		.camera_csi_on = fighter_csi_vreg_on,
 		.camera_csi_off = fighter_csi_vreg_off,
 		.cam_bus_scale_table = &cam_bus_client_pdata,
+		.is_csiphy = 1,
+		.is_csid   = 1,
+		.is_ispif  = 1,
+		.is_vpe    = 1,
 	},
 	{
 		.ioclk.mclk_clk_rate = 24000000,
@@ -367,6 +371,10 @@ struct msm_camera_device_platform_data msm_camera_csi_device_data[] = {
 		.camera_csi_on = fighter_csi_vreg_on,
 		.camera_csi_off = fighter_csi_vreg_off,
 		.cam_bus_scale_table = &cam_bus_client_pdata,
+		.is_csiphy = 1,
+		.is_csid   = 1,
+		.is_ispif  = 1,
+		.is_vpe    = 1,
 	},
 };
 
@@ -484,6 +492,11 @@ static struct msm_actuator_info s5k3h2yx_actuator_info = {
 };
 #endif
 
+static struct msm_camera_csi_lane_params s5k3h2yx_csi_lane_params = {
+	.csi_lane_assign = 0xE4,
+	.csi_lane_mask = 0x3,
+};
+
 static struct msm_camera_sensor_platform_info sensor_s5k3h2yx_board_info = {
 	.mount_angle = 90,
 	.mirror_flip = CAMERA_SENSOR_MIRROR_FLIP,
@@ -492,6 +505,7 @@ static struct msm_camera_sensor_platform_info sensor_s5k3h2yx_board_info = {
 	.sensor_pwd	= FIGHTER_CAM_PWDN,
 	.vcm_pwd	= FIGHTER_CAM_VCM_PD,
 	.vcm_enable	= 1,
+        .csi_lane_params = &s5k3h2yx_csi_lane_params,
 };
 
 /* Andrew_Cheng linear led 20111205 MB */
@@ -616,7 +630,8 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.lumen_value = 75,
 		.min_step = 0,
 		.max_step = 40
-	},};
+	},
+};
 
 static struct camera_led_info msm_camera_sensor_s5k3h2yx_led_info = {
 	.enable = 1,
@@ -658,6 +673,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_s5k3h2yx_data = {
 #endif
 	.use_rawchip = 0,
 	.flash_cfg = &msm_camera_sensor_s5k3h2yx_flash_cfg, /* Andrew_Cheng linear led 20111205 */
+	.camera_type = BACK_CAMERA_2D,
 };
 
 struct platform_device fighter_camera_sensor_s5k3h2yx = {
@@ -802,6 +818,10 @@ static struct msm_actuator_info imx105_actuator_info = {
 	.vcm_enable     = 1,
 };
 #endif
+static struct msm_camera_csi_lane_params imx105_csi_lane_params = {
+	.csi_lane_assign = 0xE4,
+	.csi_lane_mask = 0x1,
+};
 
 static struct msm_camera_sensor_platform_info sensor_imx105_board_info = {
 	.mount_angle = 90,
@@ -811,6 +831,7 @@ static struct msm_camera_sensor_platform_info sensor_imx105_board_info = {
 	.sensor_pwd	= FIGHTER_CAM_PWDN,
 	.vcm_pwd	= FIGHTER_CAM_VCM_PD,
 	.vcm_enable	= 1,
+	.csi_lane_params = &imx105_csi_lane_params,
 };
 
 /* Andrew_Cheng linear led 20111205 MB */
@@ -903,6 +924,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_imx105_data = {
 	.actuator_info = &imx105_actuator_info,
 #endif
 	.use_rawchip = 0,
+	.camera_type = BACK_CAMERA_2D,
 	.flash_cfg = &msm_camera_sensor_imx105_flash_cfg, /* Andrew_Cheng linear led 20111205 */
 };
 
@@ -1018,9 +1040,20 @@ init_fail:
 		return rc;
 }
 
+static struct msm_camera_csi_lane_params mt9v113_csi_lane_params = {
+	.csi_lane_assign = 0xE4,
+	.csi_lane_mask = 0x1,
+};
+
 static struct msm_camera_sensor_platform_info sensor_mt9v113_board_info = {
 	.mount_angle = 270,
 	.mirror_flip = CAMERA_SENSOR_NONE,
+        .sensor_reset_enable = 1,
+        .sensor_reset	= FIGHTER_CAM2_RSTz,
+	.sensor_pwd	= FIGHTER_CAM_PWDN,
+	.vcm_pwd	= 0,
+	.vcm_enable	= 1,
+	.csi_lane_params = &mt9v113_csi_lane_params,
 };
 
 static struct msm_camera_sensor_flash_data flash_mt9v113 = {
@@ -1040,6 +1073,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_mt9v113_data = {
 	.sensor_platform_info = &sensor_mt9v113_board_info,
 	.gpio_conf = &gpio_conf,
 	.csi_if	= 1,
+	.camera_type = FRONT_CAMERA_2D,
 	.use_rawchip = 0,
 };
 
