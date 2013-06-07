@@ -74,6 +74,11 @@ static struct platform_device msm_fb_device = {
 	.dev.platform_data = &msm_fb_pdata,
 };
 
+static int isOrise(void)
+{
+  return (panel_type == PANEL_ID_FIGHTER_SONY_OTM || panel_type == PANEL_ID_FIGHTER_SONY_OTM_C1_1 || panel_type == PANEL_ID_FIGHTER_SONY_OTM_MP);
+}
+
 static void __init msm8960_set_display_params(char *prim_panel, char *ext_panel)
 {
 	if (strnlen(prim_panel, PANEL_NAME_MAX_LEN)) {
@@ -171,23 +176,28 @@ static int mipi_dsi_panel_power(int on)
 			return -EINVAL;
 		}
 
-		rc = regulator_enable(v_dsivdd);
-		if (rc) {
-			printk(KERN_ERR "enable regulator %s failed, rc=%d\n", dsivdd_str, rc);
-			return -ENODEV;
-		}
-		//hr_msleep(1);
-		rc = regulator_enable(v_lcmio);
-		if (rc) {
-			printk(KERN_ERR "enable regulator %s failed, rc=%d\n", lcmio_str, rc);
-			return -ENODEV;
-		}
-
-		rc = regulator_enable(v_lcm);
-		if (rc) {
-			printk(KERN_ERR "enable regulator %s failed, rc=%d\n", lcm_str, rc);
-			return -ENODEV;
-		}
+                    rc = regulator_enable(v_dsivdd);
+                    if (rc) {
+                      printk(KERN_ERR "enable regulator %s failed, rc=%d\n", dsivdd_str, rc);
+                      return -ENODEV;
+                    }
+                if (isOrise())
+                  {
+                    //hr_msleep(1);
+                    rc = regulator_enable(v_lcmio);
+                    if (rc) {
+                      printk(KERN_ERR "enable regulator %s failed, rc=%d\n", lcmio_str, rc);
+                      return -ENODEV;
+                    }
+                  }
+                else
+                  {
+                    rc = regulator_enable(v_lcm);
+                    if (rc) {
+                      printk(KERN_ERR "enable regulator %s failed, rc=%d\n", lcm_str, rc);
+                      return -ENODEV;
+                    }
+                  }
 
 		if (!fighter_panel_first_init)
                   {
@@ -215,15 +225,21 @@ static int mipi_dsi_panel_power(int on)
 			return -EINVAL;
 		}
 
-		if (regulator_disable(v_lcm)) {
-			printk(KERN_ERR "%s: Unable to enable the regulator: %s\n", __func__, lcm_str);
-			return -EINVAL;
-		}
-		//hr_msleep(5);
-		if (regulator_disable(v_lcmio)) {
-			printk(KERN_ERR "%s: Unable to enable the regulator: %s\n", __func__, lcmio_str);
-			return -EINVAL;
-		}
+                if (isOrise())
+                  {
+                    //hr_msleep(5);
+                    if (regulator_disable(v_lcmio)) {
+                      printk(KERN_ERR "%s: Unable to enable the regulator: %s\n", __func__, lcmio_str);
+                      return -EINVAL;
+                    }
+                  }
+                else
+                  {
+                    if (regulator_disable(v_lcm)) {
+                      printk(KERN_ERR "%s: Unable to enable the regulator: %s\n", __func__, lcm_str);
+                      return -EINVAL;
+                    }
+                  }
 
 		rc = regulator_set_optimum_mode(v_dsivdd, 100);
 		if (rc < 0) {
