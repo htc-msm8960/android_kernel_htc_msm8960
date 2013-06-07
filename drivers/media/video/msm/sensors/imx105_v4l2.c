@@ -769,16 +769,16 @@ int32_t imx105_power_down(struct msm_sensor_ctrl_t *s_ctrl)
 	struct msm_camera_sensor_info *sdata = NULL;
 	pr_info("%s\n", __func__);
 
-	if (sdata->camera_power_off == NULL) {
-		pr_err("sensor platform_data didnt register\n");
-		return -EIO;
-	}
-
 	if (s_ctrl && s_ctrl->sensordata)
 		sdata = s_ctrl->sensordata;
 	else {
 		pr_info("%s: failed to s_ctrl sensordata NULL\n", __func__);
 		return (-1);
+	}
+
+	if (sdata->camera_power_off == NULL) {
+		pr_err("sensor platform_data didnt register\n");
+		return -EIO;
 	}
 
 	rc = sdata->camera_power_off();
@@ -800,10 +800,6 @@ int32_t imx105_power_down(struct msm_sensor_ctrl_t *s_ctrl)
 	if (rc < 0)
 		pr_info("%s: msm_sensor_power_down failed\n", __func__);
 	mdelay(1);
-
-	rc = sdata->camera_power_off();
-	if (rc < 0)
-		pr_info("%s: failed to disable power\n", __func__);
 
 	return rc;
 }
