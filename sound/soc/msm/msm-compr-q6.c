@@ -105,6 +105,14 @@ static struct snd_pcm_hw_constraint_list constraints_sample_rates = {
 	.mask = 0,
 };
 
+static struct msm_compr_q6_ops default_cops;
+static struct msm_compr_q6_ops *cops = &default_cops;
+
+void htc_register_compr_q6_ops(struct msm_compr_q6_ops *ops)
+{
+	cops = ops;
+}
+
 static void compr_event_handler(uint32_t opcode,
 		uint32_t token, uint32_t *payload, void *priv)
 {

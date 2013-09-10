@@ -119,16 +119,6 @@ struct htc_8930_gpio_pdata htc_audio_gpio = {
 };
 EXPORT_SYMBOL_GPL(htc_audio_gpio);
 
-static int m4_get_hw_revision(void)
-{
-	int audio_hw_rev;
-
-	audio_hw_rev = 0;
-
-	pr_info("%s: audio hw rev is %d\n", __func__, audio_hw_rev);
-	return audio_hw_rev;
-}
-
 static int m4_get_hw_component(void)
 {
 	int hw_com = 0;
@@ -167,10 +157,8 @@ static int m4_get_24b_audio(void)
 
 static struct acoustic_ops acoustic = {
 	.set_q6_effect = m4_set_q6_effect_mode,
-	.get_htc_revision = m4_get_hw_revision,
 	.get_hw_component = m4_get_hw_component,
 	.enable_digital_mic = m4_enable_digital_mic,
-	.get_24b_audio = m4_get_24b_audio,
 };
 
 static struct q6asm_ops qops = {
